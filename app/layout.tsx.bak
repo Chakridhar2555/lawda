@@ -1,13 +1,16 @@
-'use client';
-
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { Suspense } from "react"
 import { ClientLayout } from "@/components/client-layout"
 
-const inter = Inter({ subsets: ["latin"] })
+// Initialize the Inter font
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+})
 
+// Define metadata
 export const metadata: Metadata = {
   title: "Get Home Realty",
   description: "Real Estate Management System",
@@ -16,21 +19,20 @@ export const metadata: Metadata = {
   },
 }
 
+// Root layout component
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={inter.className}>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={inter.className}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <ClientLayout>
-            {children}
-          </ClientLayout>
+      <body>
+        <Suspense>
+          <ClientLayout>{children}</ClientLayout>
         </Suspense>
       </body>
     </html>

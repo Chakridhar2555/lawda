@@ -31,23 +31,8 @@ const nextConfig = {
         buffer: require.resolve('buffer/'),
       };
     }
-    // Add support for dynamic imports
-    config.module.rules.push({
-      test: /\.(js|jsx|ts|tsx)$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: ['next/babel'],
-          plugins: [
-            '@babel/plugin-syntax-dynamic-import',
-          ],
-        },
-      },
-    });
     return config;
   },
-  serverExternalPackages: ['@google/generative-ai'],
   typescript: {
     // Dangerously allow production builds to successfully complete even if
     // your project has type errors.
