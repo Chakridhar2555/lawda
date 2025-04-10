@@ -2,11 +2,12 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/components/ui/use-toast"
+import "./styles.css"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -24,23 +25,19 @@ export default function LoginPage() {
     setError("")
 
     try {
-      console.log("Login attempt:", formData) // Debug log
-
       const response = await fetch("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-        credentials: 'include' // Important for cookies
+        credentials: 'include'
       })
 
       const data = await response.json()
-      console.log("Login response:", data) // Debug log
 
       if (!response.ok) {
         throw new Error(data.error || "Login failed")
       }
 
-      // Store user data in localStorage
       localStorage.setItem("user", JSON.stringify(data.user))
 
       toast({
@@ -48,7 +45,6 @@ export default function LoginPage() {
         description: "Login successful",
       })
 
-      // Add a small delay before redirect
       setTimeout(() => {
         router.push(data.redirectPath)
       }, 500)
@@ -66,52 +62,81 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-center">Login</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="text-sm text-red-500 text-center">
-                {error}
-              </div>
-            )}
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                required
-              />
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-header">
+          <div className="login-logo">
+            <Image
+              src="/placeholder-logo.png"
+              alt="Get Home Realty"
+              width={256}
+              height={100}
+              priority
+            />
+          </div>
+          <h1 className="login-title">Welcome Back!</h1>
+          <p className="login-subtitle">How to get started with Get Home Realty?</p>
+        </div>
+
+        <div className="welcome-image-container">
+          <Image
+            src="/welcome-banner.jpg"
+            alt="Welcome"
+            fill
+            className="welcome-image"
+            priority
+          />
+          <div className="welcome-text">
+            Very good works are waiting for you!
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="login-form">
+          {error && (
+            <div className="error-message">
+              {error}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-                required
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? "Logging in..." : "Login"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+          )}
+          
+          <div className="form-group">
+            <Label htmlFor="email" className="form-label">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              className="form-input"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <Label htmlFor="password" className="form-label">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              className="form-input"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              required
+            />
+          </div>
+
+          <Button
+            type="submit"
+            className="login-button"
+            disabled={isLoading}
+          >
+            {isLoading ? "Logging in..." : "Login Now"}
+          </Button>
+
+          <div className="test-credentials">
+            <h3 className="test-credentials-title">Use these credentials for testing:</h3>
+            <p className="test-credentials-text">Email: admin@gmail.com</p>
+            <p className="test-credentials-text">Password: admin123</p>
+          </div>
+        </form>
+      </div>
     </div>
   )
 } 

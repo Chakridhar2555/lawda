@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 
+// Mark this route as dynamic
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 if (!process.env.MLS_ACCESS_TOKEN) {
   throw new Error('MLS_ACCESS_TOKEN is not defined in environment variables');
 }
